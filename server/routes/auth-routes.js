@@ -1,4 +1,5 @@
 var UserController = require('./../controllers/UserController.js');
+var flash = require('connect-flash'); 
 
 module.exports = function(app, passport) {
 
@@ -10,13 +11,15 @@ module.exports = function(app, passport) {
 
   app.get('/login',
   function(req, res) {
+    console.log(flash('error')); 
     res.render('login');
   });
 
   app.post('/login',
   passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/login'
+    failureRedirect: '/login',
+    failureFlash: 'true'
   }));
 
   app.get('/signup',

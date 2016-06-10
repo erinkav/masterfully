@@ -2,7 +2,7 @@ var session = require('express-session');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/UserModel.js');
 
-module.exports = function(app, express, passport) {
+module.exports = function(app, express, passport, flash) {
   app.use(session({
     name: 'sentimize',
     secret: 'chkakaja',
@@ -19,10 +19,12 @@ module.exports = function(app, express, passport) {
     function(email, password, done) {
       User.where('email', email).fetch().then(function(user){
         if(!user) {
-          return done(null, false, {message: 'Incorrect email.'});
+          console.log('user incorrect'); 
+          return done(null, false, {message: 'Incorrect email. Please try again'});
         } else {
           user.comparePassword(password, function(passwordCorrect) {
             if (!passwordCorrect) {
+              console.log('password incorrect'); 
               return done(null, false, {message: 'Incorrect password.'});
             } else {
               console.log('successfully logged in', email);

@@ -6,10 +6,13 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 var express = require('express');
-var passport = require('passport');
 var util = require('./lib/utility.js');
 
 var app = express();
+var flash = require('connect-flash');
+app.use(flash()); 
+var passport = require('passport');
+
 
 // API call to Watson Speech to Text
 app.use('/api/speech-to-text', require('./config/stt-token.js'));
@@ -17,7 +20,7 @@ app.use('/api/speech-to-text', require('./config/stt-token.js'));
 // Initial Configuration, Static Assets, & View Engine Configuration
 require('./config/initialize.js')(app, express);
 // Authentication Middleware: Express Sessions, Passport Strategy
-require('./config/auth.js')(app, express, passport);
+require('./config/auth.js')(app, express, passport, flash);
 
 // Pre-Authentication Routes & OAuth Requests
 require('./routes/auth-routes.js')(app, passport);
